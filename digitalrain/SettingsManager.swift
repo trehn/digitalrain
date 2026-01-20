@@ -69,6 +69,7 @@ class SettingsManager {
         case brightnessOverride
         case brightnessThreshold
         case paletteData
+        case stripeColors
         
         // Effects
         case effect
@@ -591,7 +592,7 @@ class SettingsManager {
         "huberfishA", "huberfishD", "gtarg_tenretniolleh", "gtarg_alientext", "neomatrixology"
     ]
     
-    static let availableEffects = ["palette", "plain", "stripes", "pride", "none"]
+    static let availableEffects = ["palette", "plain", "stripes", "pride", "trans", "none"]
     
     static let availableTextures = ["none", "sand", "pixels", "mesh", "metal"]
     

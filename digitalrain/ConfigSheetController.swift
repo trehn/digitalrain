@@ -126,6 +126,10 @@ class ConfigSheetController: NSObject {
     private var skipIntroCheckbox: NSButton!
     private var loopsCheckbox: NSButton!
 
+    // Custom colors
+    private var paletteTextField: NSTextField!
+    private var stripeColorsTextField: NSTextField!
+
     // URL preview
     private var urlPreviewField: NSTextField!
     private var currentURLString: String = "https://rezmason.github.io/matrix/"
@@ -576,6 +580,14 @@ class ConfigSheetController: NSObject {
             self.effectPopup = popup
         }
 
+        y = addTextFieldRow(to: view, y: y, label: "Palette (RGB):", placeholder: "r,g,b,pos,r,g,b,pos,...") { textField in
+            self.paletteTextField = textField
+        }
+
+        y = addTextFieldRow(to: view, y: y, label: "Stripe Colors (RGB):", placeholder: "r,g,b,r,g,b,...") { textField in
+            self.stripeColorsTextField = textField
+        }
+
         y = addSliderRow(to: view, y: y, label: "Bloom Strength:", min: 0.0, max: 1.0, value: 0.7) { slider, label in
             self.bloomStrengthSlider = slider
             self.bloomStrengthLabel = label
@@ -697,6 +709,24 @@ class ConfigSheetController: NSObject {
         return y - 36
     }
 
+    private func addTextFieldRow(to view: NSView, y: CGFloat, label: String, placeholder: String, configure: (NSTextField) -> Void) -> CGFloat {
+        let labelField = NSTextField(labelWithString: label)
+        labelField.frame = NSRect(x: 20, y: y, width: 150, height: 20)
+        labelField.alignment = .right
+        view.addSubview(labelField)
+
+        let textField = NSTextField(frame: NSRect(x: 180, y: y - 2, width: 340, height: 22))
+        textField.placeholderString = placeholder
+        textField.font = NSFont.monospacedSystemFont(ofSize: 11, weight: .regular)
+        textField.target = self
+        textField.action = #selector(controlChanged)
+        view.addSubview(textField)
+
+        configure(textField)
+
+        return y - 32
+    }
+
     // MARK: - Actions
 
     @objc private func perMonitorChanged() {
@@ -763,9 +793,10 @@ class ConfigSheetController: NSObject {
             "glyphRotation", "slant", "volumetric", "isometric", "isPolar", "baseTexture", "glintTexture",
             "backgroundColor", "cursorColor", "glintColor", "cursorIntensity", "glintIntensity",
             "isolateCursor", "isolateGlint", "baseBrightness", "baseContrast", "glintBrightness",
-            "glintContrast", "brightnessOverride", "brightnessThreshold", "effect", "bloomStrength",
-            "bloomSize", "highPassThreshold", "ditherMagnitude", "hasThunder", "rippleTypeName",
-            "rippleScale", "rippleThickness", "rippleSpeed", "renderer", "useHalfFloat", "skipIntro", "loops"
+            "glintContrast", "brightnessOverride", "brightnessThreshold", "effect", "paletteData",
+            "stripeColors", "bloomStrength", "bloomSize", "highPassThreshold", "ditherMagnitude",
+            "hasThunder", "rippleTypeName", "rippleScale", "rippleThickness", "rippleSpeed",
+            "renderer", "useHalfFloat", "skipIntro", "loops"
         ]
 
         for targetScreenID in allScreenIDs {
@@ -893,6 +924,10 @@ class ConfigSheetController: NSObject {
         useHalfFloatCheckbox.state = .off
         skipIntroCheckbox.state = .on
         loopsCheckbox.state = .off
+
+        // Custom colors
+        paletteTextField.stringValue = ""
+        stripeColorsTextField.stringValue = ""
 
         updateURLPreview()
     }
@@ -1115,6 +1150,10 @@ class ConfigSheetController: NSObject {
         rippleSpeedSlider.doubleValue = getCachedDouble("rippleSpeed", screen: screen, default: 0.2)
         rippleSpeedLabel.stringValue = String(format: "%.2f", rippleSpeedSlider.doubleValue)
 
+        // Custom colors
+        paletteTextField.stringValue = getCachedString("paletteData", screen: screen, default: "")
+        stripeColorsTextField.stringValue = getCachedString("stripeColors", screen: screen, default: "")
+
         // Advanced
         rendererPopup.selectItem(withTitle: getCachedString("renderer", screen: screen, default: "regl"))
         useHalfFloatCheckbox.state = getCachedBool("useHalfFloat", screen: screen, default: false) ? .on : .off
@@ -1186,6 +1225,10 @@ class ConfigSheetController: NSObject {
         setCached(rippleScaleSlider.doubleValue, forKey: "rippleScale", screen: screen)
         setCached(rippleThicknessSlider.doubleValue, forKey: "rippleThickness", screen: screen)
         setCached(rippleSpeedSlider.doubleValue, forKey: "rippleSpeed", screen: screen)
+
+        // Custom colors
+        setCached(paletteTextField.stringValue, forKey: "paletteData", screen: screen)
+        setCached(stripeColorsTextField.stringValue, forKey: "stripeColors", screen: screen)
 
         // Advanced
         setCached(rendererPopup.titleOfSelectedItem ?? "regl", forKey: "renderer", screen: screen)
@@ -1292,6 +1335,17 @@ class ConfigSheetController: NSObject {
 
         // Effects
         addString("effect", value: effectPopup.titleOfSelectedItem, defaultValue: "palette")
+
+        // Custom palette and stripe colors (only add if non-empty)
+        let paletteValue = paletteTextField.stringValue.trimmingCharacters(in: .whitespaces)
+        if !paletteValue.isEmpty {
+            items.append(URLQueryItem(name: "palette", value: paletteValue))
+        }
+        let stripeColorsValue = stripeColorsTextField.stringValue.trimmingCharacters(in: .whitespaces)
+        if !stripeColorsValue.isEmpty {
+            items.append(URLQueryItem(name: "stripeColors", value: stripeColorsValue))
+        }
+
         addDouble("bloomStrength", value: bloomStrengthSlider.doubleValue, defaultValue: 0.7)
         addDouble("bloomSize", value: bloomSizeSlider.doubleValue, defaultValue: 0.4)
         addDouble("highPassThreshold", value: highPassThresholdSlider.doubleValue, defaultValue: 0.1)
