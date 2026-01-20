@@ -333,6 +333,13 @@ class ConfigSheetController: NSObject {
         tabView.addTabViewItem(tabItem)
     }
     
+    private func scrollToTop(_ scrollView: NSScrollView) {
+        if let documentView = scrollView.documentView {
+            let topPoint = NSPoint(x: 0, y: documentView.bounds.height - scrollView.contentSize.height)
+            documentView.scroll(topPoint)
+        }
+    }
+    
     private func setupAnimationTab() {
         let tabItem = NSTabViewItem(identifier: "animation")
         tabItem.label = "Animation"
@@ -344,6 +351,7 @@ class ConfigSheetController: NSObject {
         let view = NSView(frame: NSRect(x: 0, y: 0, width: tabView.contentRect.width - 20, height: 320))
         scrollView.documentView = view
         tabItem.view = scrollView
+        scrollToTop(scrollView)
         
         var y = view.bounds.height - 30
         
@@ -401,6 +409,7 @@ class ConfigSheetController: NSObject {
         let view = NSView(frame: NSRect(x: 0, y: 0, width: tabView.contentRect.width - 20, height: 560))
         scrollView.documentView = view
         tabItem.view = scrollView
+        scrollToTop(scrollView)
         
         var y = view.bounds.height - 30
         
@@ -482,6 +491,7 @@ class ConfigSheetController: NSObject {
         let view = NSView(frame: NSRect(x: 0, y: 0, width: tabView.contentRect.width - 20, height: 480))
         scrollView.documentView = view
         tabItem.view = scrollView
+        scrollToTop(scrollView)
         
         var y = view.bounds.height - 30
         
@@ -559,6 +569,7 @@ class ConfigSheetController: NSObject {
         let view = NSView(frame: NSRect(x: 0, y: 0, width: tabView.contentRect.width - 20, height: 400))
         scrollView.documentView = view
         tabItem.view = scrollView
+        scrollToTop(scrollView)
         
         var y = view.bounds.height - 30
         
@@ -1223,7 +1234,7 @@ class ConfigSheetController: NSObject {
         // Helper to add non-default double values
         func addDouble(_ paramName: String, value: Double, defaultValue: Double) {
             guard abs(value - defaultValue) > 0.001 else { return }
-            items.append(URLQueryItem(name: paramName, value: String(value)))
+            items.append(URLQueryItem(name: paramName, value: String(format: "%.4g", value)))
         }
         
         // Helper to add non-default int values
@@ -1248,9 +1259,9 @@ class ConfigSheetController: NSObject {
             let bDiff = abs(calibrated.brightnessComponent - defaultCalibrated.brightnessComponent)
             
             if hDiff > 0.01 || sDiff > 0.01 || bDiff > 0.01 {
-                let h = calibrated.hueComponent
-                let s = calibrated.saturationComponent
-                let l = calibrated.brightnessComponent
+                let h = String(format: "%.4g", calibrated.hueComponent)
+                let s = String(format: "%.4g", calibrated.saturationComponent)
+                let l = String(format: "%.4g", calibrated.brightnessComponent)
                 items.append(URLQueryItem(name: paramName, value: "\(h),\(s),\(l)"))
             }
         }
