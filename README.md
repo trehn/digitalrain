@@ -5,3 +5,5 @@ This is a wrapper around the magnificent [Matrix visualization by Rezmason](http
 Runs a local copy of the visualization (so it will work offline) and provides a UI to configure all settings:
 
 ![Screenshot](/screenshot.png)
+
+Download from [the Releases page](https://github.com/trehn/digitalrain/releases), double-click to install, then open System Settings > Wallpaper > Screen Saver... > Other > Show all...
