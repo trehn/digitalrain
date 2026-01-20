@@ -25,10 +25,10 @@ fi
 
 # Find the built product (exclude Index.noindex which contains incomplete builds)
 DERIVED_DATA="$HOME/Library/Developer/Xcode/DerivedData"
-SAVER_PATH=$(find "$DERIVED_DATA" -name "digitalrain.saver" -path "*/Build/Products/Debug/*" -not -path "*/Index.noindex/*" -type d 2>/dev/null | head -1)
+SAVER_PATH=$(find "$DERIVED_DATA" -name "Digital Rain.saver" -path "*/Build/Products/Debug/*" -not -path "*/Index.noindex/*" -type d 2>/dev/null | head -1)
 
 if [ -z "$SAVER_PATH" ]; then
-    echo "ERROR: Could not find built digitalrain.saver"
+    echo "ERROR: Could not find built Digital Rain.saver"
     exit 1
 fi
 
@@ -36,14 +36,14 @@ echo "Found built screensaver at: $SAVER_PATH"
 
 # Remove old installation
 echo "Removing old installation..."
-rm -rf "$HOME/Library/Screen Savers/digitalrain.saver"
+rm -rf "$HOME/Library/Screen Savers/Digital Rain.saver"
 
 # Install new version (preserve timestamps for code signing)
 echo "Installing..."
 cp -Rp "$SAVER_PATH" "$HOME/Library/Screen Savers/"
 
 # Verify installation
-if [ -d "$HOME/Library/Screen Savers/digitalrain.saver" ]; then
+if [ -d "$HOME/Library/Screen Savers/Digital Rain.saver" ]; then
     echo "=== Deployment successful! ==="
     echo ""
     echo "Opening System Settings → Screen Saver..."

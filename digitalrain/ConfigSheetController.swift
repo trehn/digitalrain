@@ -638,9 +638,9 @@ class ConfigSheetController: NSObject {
         slider.doubleValue = value
         slider.target = self
         slider.action = #selector(sliderChanged(_:))
-        if isInteger {
-            slider.numberOfTickMarks = Int(max - min) + 1
-            slider.allowsTickMarkValuesOnly = step == nil
+        if isInteger && step == nil {
+            // Snap to integer values without showing tick marks
+            slider.allowsTickMarkValuesOnly = false
         }
         view.addSubview(slider)
 
