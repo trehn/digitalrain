@@ -1,0 +1,364 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AA000001AAAAAAAA00000001 /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA000002AAAAAAAA00000002 /* ScreenSaver.framework */; };
+		AA000003AAAAAAAA00000003 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA000004AAAAAAAA00000004 /* WebKit.framework */; };
+		AA000005AAAAAAAA00000005 /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA000006AAAAAAAA00000006 /* Network.framework */; };
+		AA000007AAAAAAAA00000007 /* MactrixView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000008AAAAAAAA00000008 /* MactrixView.swift */; };
+		AA000009AAAAAAAA00000009 /* LocalServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000AAAAAAAAA0000000A /* LocalServer.swift */; };
+		AA00000BAAAAAAAA0000000B /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000CAAAAAAAA0000000C /* SettingsManager.swift */; };
+		AA00000DAAAAAAAA0000000D /* ConfigSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000EAAAAAAAA0000000E /* ConfigSheetController.swift */; };
+		AA00000FAAAAAAAA0000000F /* matrix in Resources */ = {isa = PBXBuildFile; fileRef = AA000010AAAAAAAA00000010 /* matrix */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		72E87D772F1F973C00B81E05 /* mactrix.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mactrix.saver; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA000002AAAAAAAA00000002 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = System/Library/Frameworks/ScreenSaver.framework; sourceTree = SDKROOT; };
+		AA000004AAAAAAAA00000004 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		AA000006AAAAAAAA00000006 /* Network.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
+		AA000008AAAAAAAA00000008 /* MactrixView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MactrixView.swift; sourceTree = "<group>"; };
+		AA00000AAAAAAAAA0000000A /* LocalServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalServer.swift; sourceTree = "<group>"; };
+		AA00000CAAAAAAAA0000000C /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		AA00000EAAAAAAAA0000000E /* ConfigSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigSheetController.swift; sourceTree = "<group>"; };
+		AA000010AAAAAAAA00000010 /* matrix */ = {isa = PBXFileReference; lastKnownFileType = folder; path = matrix; sourceTree = "<group>"; };
+		AA000013AAAAAAAA00000013 /* mactrix.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = mactrix.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		72E87D742F1F973C00B81E05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001AAAAAAAA00000001 /* ScreenSaver.framework in Frameworks */,
+				AA000003AAAAAAAA00000003 /* WebKit.framework in Frameworks */,
+				AA000005AAAAAAAA00000005 /* Network.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		72E87D6D2F1F973C00B81E05 = {
+			isa = PBXGroup;
+			children = (
+				AA000011AAAAAAAA00000011 /* mactrix */,
+				AA000010AAAAAAAA00000010 /* matrix */,
+				AA000012AAAAAAAA00000012 /* Frameworks */,
+				72E87D782F1F973C00B81E05 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		72E87D782F1F973C00B81E05 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				72E87D772F1F973C00B81E05 /* mactrix.saver */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AA000011AAAAAAAA00000011 /* mactrix */ = {
+			isa = PBXGroup;
+			children = (
+				AA000008AAAAAAAA00000008 /* MactrixView.swift */,
+				AA00000AAAAAAAAA0000000A /* LocalServer.swift */,
+				AA00000CAAAAAAAA0000000C /* SettingsManager.swift */,
+				AA00000EAAAAAAAA0000000E /* ConfigSheetController.swift */,
+				AA000013AAAAAAAA00000013 /* mactrix.entitlements */,
+			);
+			path = mactrix;
+			sourceTree = "<group>";
+		};
+		AA000012AAAAAAAA00000012 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002AAAAAAAA00000002 /* ScreenSaver.framework */,
+				AA000004AAAAAAAA00000004 /* WebKit.framework */,
+				AA000006AAAAAAAA00000006 /* Network.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		72E87D722F1F973C00B81E05 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		72E87D762F1F973C00B81E05 /* mactrix */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 72E87D802F1F973C00B81E05 /* Build configuration list for PBXNativeTarget "mactrix" */;
+			buildPhases = (
+				72E87D722F1F973C00B81E05 /* Headers */,
+				72E87D732F1F973C00B81E05 /* Sources */,
+				72E87D742F1F973C00B81E05 /* Frameworks */,
+				72E87D752F1F973C00B81E05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mactrix;
+			packageProductDependencies = (
+			);
+			productName = mactrix;
+			productReference = 72E87D772F1F973C00B81E05 /* mactrix.saver */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		72E87D6E2F1F973C00B81E05 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					72E87D762F1F973C00B81E05 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+				};
+			};
+			buildConfigurationList = 72E87D712F1F973C00B81E05 /* Build configuration list for PBXProject "mactrix" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 72E87D6D2F1F973C00B81E05;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 72E87D782F1F973C00B81E05 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				72E87D762F1F973C00B81E05 /* mactrix */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		72E87D752F1F973C00B81E05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA00000FAAAAAAAA0000000F /* matrix in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		72E87D732F1F973C00B81E05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000007AAAAAAAA00000007 /* MactrixView.swift in Sources */,
+				AA000009AAAAAAAA00000009 /* LocalServer.swift in Sources */,
+				AA00000BAAAAAAAA0000000B /* SettingsManager.swift in Sources */,
+				AA00000DAAAAAAAA0000000D /* ConfigSheetController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		72E87D7E2F1F973C00B81E05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		72E87D7F2F1F973C00B81E05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		72E87D812F1F973C00B81E05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = mactrix/mactrix.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = mactrix;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025. MIT License.";
+				INFOPLIST_KEY_NSPrincipalClass = MactrixView;
+				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trehn.mactrix;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = saver;
+			};
+			name = Debug;
+		};
+		72E87D822F1F973C00B81E05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = mactrix/mactrix.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = mactrix;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025. MIT License.";
+				INFOPLIST_KEY_NSPrincipalClass = MactrixView;
+				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trehn.mactrix;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = saver;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		72E87D712F1F973C00B81E05 /* Build configuration list for PBXProject "mactrix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72E87D7E2F1F973C00B81E05 /* Debug */,
+				72E87D7F2F1F973C00B81E05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		72E87D802F1F973C00B81E05 /* Build configuration list for PBXNativeTarget "mactrix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72E87D812F1F973C00B81E05 /* Debug */,
+				72E87D822F1F973C00B81E05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 72E87D6E2F1F973C00B81E05 /* Project object */;
+}
