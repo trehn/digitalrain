@@ -174,12 +174,11 @@ class ConfigSheetController: NSObject {
         contentView.addSubview(tabView)
         
         // Create tabs
-        setupPresetsTab()
+        setupGeneralTab()
         setupAnimationTab()
         setupAppearanceTab()
         setupColorsTab()
         setupEffectsTab()
-        setupAdvancedTab()
         
         // URL preview label
         let urlLabel = NSTextField(labelWithString: "Preview URL (real screensaver uses local copy):")
@@ -311,23 +310,42 @@ class ConfigSheetController: NSObject {
     
     // MARK: - Tab Setup
     
-    private func setupPresetsTab() {
-        let tabItem = NSTabViewItem(identifier: "presets")
-        tabItem.label = "Presets"
+    private func setupGeneralTab() {
+        let tabItem = NSTabViewItem(identifier: "general")
+        tabItem.label = "General"
         
         let view = NSView(frame: tabView.contentRect)
         tabItem.view = view
         
         var y = view.bounds.height - 30
         
-        // Version
+        // Presets
         y = addPopupRow(to: view, y: y, label: "Version:", items: SettingsManager.availableVersions) { popup in
             self.versionPopup = popup
         }
         
-        // Font
         y = addPopupRow(to: view, y: y, label: "Font:", items: SettingsManager.availableFonts) { popup in
             self.fontPopup = popup
+        }
+        
+        // Separator
+        y -= 10
+        
+        // Advanced options
+        y = addPopupRow(to: view, y: y, label: "Renderer:", items: SettingsManager.availableRenderers) { popup in
+            self.rendererPopup = popup
+        }
+        
+        y = addCheckboxRow(to: view, y: y, label: "Use Half Float (lower precision, better performance)") { checkbox in
+            self.useHalfFloatCheckbox = checkbox
+        }
+        
+        y = addCheckboxRow(to: view, y: y, label: "Skip Intro") { checkbox in
+            self.skipIntroCheckbox = checkbox
+        }
+        
+        y = addCheckboxRow(to: view, y: y, label: "Loop Animation") { checkbox in
+            self.loopsCheckbox = checkbox
         }
         
         tabView.addTabViewItem(tabItem)
@@ -623,33 +641,7 @@ class ConfigSheetController: NSObject {
         tabView.addTabViewItem(tabItem)
     }
     
-    private func setupAdvancedTab() {
-        let tabItem = NSTabViewItem(identifier: "advanced")
-        tabItem.label = "Advanced"
-        
-        let view = NSView(frame: tabView.contentRect)
-        tabItem.view = view
-        
-        var y = view.bounds.height - 30
-        
-        y = addPopupRow(to: view, y: y, label: "Renderer:", items: SettingsManager.availableRenderers) { popup in
-            self.rendererPopup = popup
-        }
-        
-        y = addCheckboxRow(to: view, y: y, label: "Use Half Float (lower precision, better performance)") { checkbox in
-            self.useHalfFloatCheckbox = checkbox
-        }
-        
-        y = addCheckboxRow(to: view, y: y, label: "Skip Intro") { checkbox in
-            self.skipIntroCheckbox = checkbox
-        }
-        
-        y = addCheckboxRow(to: view, y: y, label: "Loop Animation") { checkbox in
-            self.loopsCheckbox = checkbox
-        }
-        
-        tabView.addTabViewItem(tabItem)
-    }
+
     
     // MARK: - UI Helpers
     
