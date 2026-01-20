@@ -2,7 +2,7 @@ import AppKit
 import ScreenSaver
 import os.log
 
-private let configLogger = OSLog(subsystem: "com.trehn.mactrix", category: "ConfigSheet")
+private let configLogger = OSLog(subsystem: "com.trehn.digitalrain", category: "ConfigSheet")
 
 /// Delegate protocol for config sheet dismissal
 protocol ConfigSheetControllerDelegate: AnyObject {
@@ -140,7 +140,7 @@ class ConfigSheetController: NSObject {
             backing: .buffered,
             defer: false
         )
-        window.title = "Mactrix Settings"
+        window.title = "Digital Rain Settings"
 
         super.init()
 
@@ -1340,7 +1340,7 @@ class ConfigSheetController: NSObject {
         // We need the actual user home, not the sandboxed home
         let pw = getpwuid(getuid())
         let realHome = pw != nil ? String(cString: pw!.pointee.pw_dir) : NSHomeDirectory()
-        let containerPath = realHome + "/Library/Containers/com.apple.ScreenSaver.Engine.legacyScreenSaver/Data/Library/Preferences/com.trehn.mactrix.plist"
+        let containerPath = realHome + "/Library/Containers/com.apple.ScreenSaver.Engine.legacyScreenSaver/Data/Library/Preferences/com.trehn.digitalrain.plist"
 
         os_log("persistCacheToDisk: realHome=%{public}@, containerPath=%{public}@", log: configLogger, type: .info, realHome, containerPath)
 

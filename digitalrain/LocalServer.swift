@@ -2,14 +2,14 @@ import Foundation
 import Network
 import os.log
 
-private let serverLogger = OSLog(subsystem: "com.trehn.mactrix", category: "LocalServer")
+private let serverLogger = OSLog(subsystem: "com.trehn.digitalrain", category: "LocalServer")
 
 /// A minimal HTTP server that serves static files from the bundled matrix web app
 class LocalServer {
     
     private var listener: NWListener?
     private let resourceURL: URL
-    private let queue = DispatchQueue(label: "com.trehn.mactrix.server", qos: .userInteractive)
+    private let queue = DispatchQueue(label: "com.trehn.digitalrain.server", qos: .userInteractive)
     private var connections: [NWConnection] = []
     private(set) var port: UInt16 = 0
     private(set) var isRunning = false

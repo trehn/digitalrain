@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "=== Mactrix Screensaver Deploy Script ==="
+echo "=== Digital Rain Screensaver Deploy Script ==="
 
 # Kill any running screensaver processes and System Settings
 echo "Killing screensaver processes and System Settings..."
@@ -15,7 +15,7 @@ sleep 1
 # Build the project
 echo "Building..."
 cd "$(dirname "$0")"
-xcodebuild -project mactrix.xcodeproj -scheme mactrix -configuration Debug build 2>&1 | grep -E "(error:|warning:|BUILD)" | grep -v "Metadata extraction skipped"
+xcodebuild -project digitalrain.xcodeproj -scheme digitalrain -configuration Debug build 2>&1 | grep -E "(error:|warning:|BUILD)" | grep -v "Metadata extraction skipped"
 
 # Check if build succeeded
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
@@ -25,10 +25,10 @@ fi
 
 # Find the built product (exclude Index.noindex which contains incomplete builds)
 DERIVED_DATA="$HOME/Library/Developer/Xcode/DerivedData"
-SAVER_PATH=$(find "$DERIVED_DATA" -name "mactrix.saver" -path "*/Build/Products/Debug/*" -not -path "*/Index.noindex/*" -type d 2>/dev/null | head -1)
+SAVER_PATH=$(find "$DERIVED_DATA" -name "digitalrain.saver" -path "*/Build/Products/Debug/*" -not -path "*/Index.noindex/*" -type d 2>/dev/null | head -1)
 
 if [ -z "$SAVER_PATH" ]; then
-    echo "ERROR: Could not find built mactrix.saver"
+    echo "ERROR: Could not find built digitalrain.saver"
     exit 1
 fi
 
@@ -36,14 +36,14 @@ echo "Found built screensaver at: $SAVER_PATH"
 
 # Remove old installation
 echo "Removing old installation..."
-rm -rf "$HOME/Library/Screen Savers/mactrix.saver"
+rm -rf "$HOME/Library/Screen Savers/digitalrain.saver"
 
 # Install new version (preserve timestamps for code signing)
 echo "Installing..."
 cp -Rp "$SAVER_PATH" "$HOME/Library/Screen Savers/"
 
 # Verify installation
-if [ -d "$HOME/Library/Screen Savers/mactrix.saver" ]; then
+if [ -d "$HOME/Library/Screen Savers/digitalrain.saver" ]; then
     echo "=== Deployment successful! ==="
     echo ""
     echo "Opening System Settings → Screen Saver..."

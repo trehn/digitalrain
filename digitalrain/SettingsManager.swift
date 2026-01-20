@@ -3,16 +3,16 @@ import ScreenSaver
 import AppKit
 import os.log
 
-private let settingsLogger = OSLog(subsystem: "com.trehn.mactrix", category: "Settings")
+private let settingsLogger = OSLog(subsystem: "com.trehn.digitalrain", category: "Settings")
 
-/// Manages all settings for the Mactrix screensaver with support for per-monitor configuration
+/// Manages all settings for the Digital Rain screensaver with support for per-monitor configuration
 class SettingsManager {
     
     static let shared = SettingsManager()
     
     // Made internal so ConfigSheetController can persist cached values directly
     var defaults: UserDefaults
-    private let moduleName = "com.trehn.mactrix"
+    private let moduleName = "com.trehn.digitalrain"
     
     // Direct plist data for bypassing UserDefaults caching
     private var plistData: [String: Any] = [:]
@@ -243,7 +243,7 @@ class SettingsManager {
         // Read directly from the plist file to bypass cfprefsd caching
         let pw = getpwuid(getuid())
         let realHome = pw != nil ? String(cString: pw!.pointee.pw_dir) : NSHomeDirectory()
-        let plistPath = realHome + "/Library/Containers/com.apple.ScreenSaver.Engine.legacyScreenSaver/Data/Library/Preferences/com.trehn.mactrix.plist"
+        let plistPath = realHome + "/Library/Containers/com.apple.ScreenSaver.Engine.legacyScreenSaver/Data/Library/Preferences/com.trehn.digitalrain.plist"
         
         if let dict = NSDictionary(contentsOfFile: plistPath) as? [String: Any] {
             plistData = dict

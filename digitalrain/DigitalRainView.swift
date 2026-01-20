@@ -2,11 +2,11 @@ import ScreenSaver
 import WebKit
 import os.log
 
-private let logger = OSLog(subsystem: "com.trehn.mactrix", category: "MactrixView")
+private let logger = OSLog(subsystem: "com.trehn.digitalrain", category: "DigitalRainView")
 
 // MARK: - WKWebView Private API for disabling window occlusion detection
 extension WKWebView {
-    @objc func mactrix_setWindowOcclusionDetectionEnabled(_ enabled: Bool) {
+    @objc func digitalrain_setWindowOcclusionDetectionEnabled(_ enabled: Bool) {
         let selector = NSSelectorFromString("_setWindowOcclusionDetectionEnabled:")
         if responds(to: selector) {
             perform(selector, with: NSNumber(value: enabled))
@@ -15,8 +15,8 @@ extension WKWebView {
 }
 
 /// Main screensaver view that displays the Matrix digital rain effect
-@objc(MactrixView)
-class MactrixView: ScreenSaverView {
+@objc(DigitalRainView)
+class DigitalRainView: ScreenSaverView {
     
     private var webView: WKWebView?
     private var server: LocalServer?
@@ -120,7 +120,7 @@ class MactrixView: ScreenSaverView {
         // Disable window occlusion detection (critical for screensaver on Sonoma+)
         // This prevents the webview from pausing when it thinks the window is hidden
         if #available(macOS 14.0, *) {
-            webView.mactrix_setWindowOcclusionDetectionEnabled(false)
+            webView.digitalrain_setWindowOcclusionDetectionEnabled(false)
             os_log("setupWebView: disabled window occlusion detection", log: logger, type: .info)
         }
         
@@ -142,7 +142,7 @@ class MactrixView: ScreenSaverView {
         }
         
         // Find the bundled matrix folder
-        let bundle = Bundle(for: MactrixView.self)
+        let bundle = Bundle(for: DigitalRainView.self)
         os_log("startServer: bundle path: %{public}@", log: logger, type: .info, bundle.bundlePath)
         
         guard let matrixURL = bundle.url(forResource: "matrix", withExtension: nil) else {
@@ -220,7 +220,7 @@ class MactrixView: ScreenSaverView {
         }
         
         // Find the bundled matrix folder
-        let bundle = Bundle(for: MactrixView.self)
+        let bundle = Bundle(for: DigitalRainView.self)
         guard let matrixURL = bundle.url(forResource: "matrix", withExtension: nil) else {
             os_log("startServerOnly: Could not find matrix resources in bundle", log: logger, type: .error)
             return false
@@ -427,7 +427,7 @@ class MactrixView: ScreenSaverView {
 
 // MARK: - WKNavigationDelegate
 
-extension MactrixView: WKNavigationDelegate, WKUIDelegate {
+extension DigitalRainView: WKNavigationDelegate, WKUIDelegate {
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         os_log("Navigation failed: %{public}@", log: logger, type: .error, error.localizedDescription)
     }
@@ -473,7 +473,7 @@ extension MactrixView: WKNavigationDelegate, WKUIDelegate {
 
 // MARK: - ConfigSheetControllerDelegate
 
-extension MactrixView: ConfigSheetControllerDelegate {
+extension DigitalRainView: ConfigSheetControllerDelegate {
     func configSheetDidSave(_ controller: ConfigSheetController) {
         os_log("configSheetDidSave: reloading content", log: logger, type: .info)
         if isPreview {

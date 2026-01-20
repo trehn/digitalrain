@@ -10,7 +10,7 @@
 		AA000001AAAAAAAA00000001 /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA000002AAAAAAAA00000002 /* ScreenSaver.framework */; };
 		AA000003AAAAAAAA00000003 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA000004AAAAAAAA00000004 /* WebKit.framework */; };
 		AA000005AAAAAAAA00000005 /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA000006AAAAAAAA00000006 /* Network.framework */; };
-		AA000007AAAAAAAA00000007 /* MactrixView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000008AAAAAAAA00000008 /* MactrixView.swift */; };
+		AA000007AAAAAAAA00000007 /* DigitalRainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000008AAAAAAAA00000008 /* DigitalRainView.swift */; };
 		AA000009AAAAAAAA00000009 /* LocalServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000AAAAAAAAA0000000A /* LocalServer.swift */; };
 		AA00000BAAAAAAAA0000000B /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000CAAAAAAAA0000000C /* SettingsManager.swift */; };
 		AA00000DAAAAAAAA0000000D /* ConfigSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000EAAAAAAAA0000000E /* ConfigSheetController.swift */; };
@@ -18,16 +18,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		72E87D772F1F973C00B81E05 /* mactrix.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mactrix.saver; sourceTree = BUILT_PRODUCTS_DIR; };
+		72E87D772F1F973C00B81E05 /* digitalrain.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = digitalrain.saver; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA000002AAAAAAAA00000002 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = System/Library/Frameworks/ScreenSaver.framework; sourceTree = SDKROOT; };
 		AA000004AAAAAAAA00000004 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		AA000006AAAAAAAA00000006 /* Network.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
-		AA000008AAAAAAAA00000008 /* MactrixView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MactrixView.swift; sourceTree = "<group>"; };
+		AA000008AAAAAAAA00000008 /* DigitalRainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitalRainView.swift; sourceTree = "<group>"; };
 		AA00000AAAAAAAAA0000000A /* LocalServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalServer.swift; sourceTree = "<group>"; };
 		AA00000CAAAAAAAA0000000C /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
 		AA00000EAAAAAAAA0000000E /* ConfigSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigSheetController.swift; sourceTree = "<group>"; };
 		AA000010AAAAAAAA00000010 /* matrix */ = {isa = PBXFileReference; lastKnownFileType = folder; path = matrix; sourceTree = "<group>"; };
-		AA000013AAAAAAAA00000013 /* mactrix.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = mactrix.entitlements; sourceTree = "<group>"; };
+		AA000013AAAAAAAA00000013 /* digitalrain.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = digitalrain.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,7 +47,7 @@
 		72E87D6D2F1F973C00B81E05 = {
 			isa = PBXGroup;
 			children = (
-				AA000011AAAAAAAA00000011 /* mactrix */,
+				AA000011AAAAAAAA00000011 /* digitalrain */,
 				AA000010AAAAAAAA00000010 /* matrix */,
 				AA000012AAAAAAAA00000012 /* Frameworks */,
 				72E87D782F1F973C00B81E05 /* Products */,
@@ -57,21 +57,21 @@
 		72E87D782F1F973C00B81E05 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				72E87D772F1F973C00B81E05 /* mactrix.saver */,
+				72E87D772F1F973C00B81E05 /* digitalrain.saver */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AA000011AAAAAAAA00000011 /* mactrix */ = {
+		AA000011AAAAAAAA00000011 /* digitalrain */ = {
 			isa = PBXGroup;
 			children = (
-				AA000008AAAAAAAA00000008 /* MactrixView.swift */,
+				AA000008AAAAAAAA00000008 /* DigitalRainView.swift */,
 				AA00000AAAAAAAAA0000000A /* LocalServer.swift */,
 				AA00000CAAAAAAAA0000000C /* SettingsManager.swift */,
 				AA00000EAAAAAAAA0000000E /* ConfigSheetController.swift */,
-				AA000013AAAAAAAA00000013 /* mactrix.entitlements */,
+				AA000013AAAAAAAA00000013 /* digitalrain.entitlements */,
 			);
-			path = mactrix;
+			path = digitalrain;
 			sourceTree = "<group>";
 		};
 		AA000012AAAAAAAA00000012 /* Frameworks */ = {
@@ -97,9 +97,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		72E87D762F1F973C00B81E05 /* mactrix */ = {
+		72E87D762F1F973C00B81E05 /* digitalrain */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 72E87D802F1F973C00B81E05 /* Build configuration list for PBXNativeTarget "mactrix" */;
+			buildConfigurationList = 72E87D802F1F973C00B81E05 /* Build configuration list for PBXNativeTarget "digitalrain" */;
 			buildPhases = (
 				72E87D722F1F973C00B81E05 /* Headers */,
 				72E87D732F1F973C00B81E05 /* Sources */,
@@ -110,11 +110,11 @@
 			);
 			dependencies = (
 			);
-			name = mactrix;
+			name = digitalrain;
 			packageProductDependencies = (
 			);
-			productName = mactrix;
-			productReference = 72E87D772F1F973C00B81E05 /* mactrix.saver */;
+			productName = digitalrain;
+			productReference = 72E87D772F1F973C00B81E05 /* digitalrain.saver */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -131,7 +131,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 72E87D712F1F973C00B81E05 /* Build configuration list for PBXProject "mactrix" */;
+			buildConfigurationList = 72E87D712F1F973C00B81E05 /* Build configuration list for PBXProject "digitalrain" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -145,7 +145,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				72E87D762F1F973C00B81E05 /* mactrix */,
+				72E87D762F1F973C00B81E05 /* digitalrain */,
 			);
 		};
 /* End PBXProject section */
@@ -166,7 +166,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA000007AAAAAAAA00000007 /* MactrixView.swift in Sources */,
+				AA000007AAAAAAAA00000007 /* DigitalRainView.swift in Sources */,
 				AA000009AAAAAAAA00000009 /* LocalServer.swift in Sources */,
 				AA00000BAAAAAAAA0000000B /* SettingsManager.swift in Sources */,
 				AA00000DAAAAAAAA0000000D /* ConfigSheetController.swift in Sources */,
@@ -296,17 +296,17 @@
 		72E87D812F1F973C00B81E05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = mactrix/mactrix.entitlements;
+				CODE_SIGN_ENTITLEMENTS = digitalrain/digitalrain.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = mactrix;
+				INFOPLIST_KEY_CFBundleDisplayName = "Digital Rain";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025. MIT License.";
-				INFOPLIST_KEY_NSPrincipalClass = MactrixView;
+				INFOPLIST_KEY_NSPrincipalClass = DigitalRainView;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.trehn.mactrix;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trehn.digitalrain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -318,17 +318,17 @@
 		72E87D822F1F973C00B81E05 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = mactrix/mactrix.entitlements;
+				CODE_SIGN_ENTITLEMENTS = digitalrain/digitalrain.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = mactrix;
+				INFOPLIST_KEY_CFBundleDisplayName = "Digital Rain";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025. MIT License.";
-				INFOPLIST_KEY_NSPrincipalClass = MactrixView;
+				INFOPLIST_KEY_NSPrincipalClass = DigitalRainView;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.trehn.mactrix;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trehn.digitalrain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -340,7 +340,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		72E87D712F1F973C00B81E05 /* Build configuration list for PBXProject "mactrix" */ = {
+		72E87D712F1F973C00B81E05 /* Build configuration list for PBXProject "digitalrain" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72E87D7E2F1F973C00B81E05 /* Debug */,
@@ -349,7 +349,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		72E87D802F1F973C00B81E05 /* Build configuration list for PBXNativeTarget "mactrix" */ = {
+		72E87D802F1F973C00B81E05 /* Build configuration list for PBXNativeTarget "digitalrain" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72E87D812F1F973C00B81E05 /* Debug */,
