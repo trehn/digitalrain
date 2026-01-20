@@ -135,7 +135,7 @@ class ConfigSheetController: NSObject {
     override init() {
         // Create the window
         window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 580, height: 720),
+            contentRect: NSRect(x: 0, y: 0, width: 820, height: 640),
             styleMask: [.titled],
             backing: .buffered,
             defer: false
@@ -168,9 +168,13 @@ class ConfigSheetController: NSObject {
         contentView.addSubview(separator)
         y -= 15
 
-        // Tab view (leave space for URL preview and buttons at bottom)
-        let bottomAreaHeight: CGFloat = 200
-        tabView = NSTabView(frame: NSRect(x: padding, y: bottomAreaHeight, width: contentView.bounds.width - padding * 2, height: y - bottomAreaHeight))
+        // Layout: tabs on left, URL preview on right
+        let tabWidth: CGFloat = 560
+        let urlPreviewWidth: CGFloat = contentView.bounds.width - tabWidth - padding * 3
+        let bottomButtonHeight: CGFloat = 50
+
+        // Tab view on the left
+        tabView = NSTabView(frame: NSRect(x: padding, y: bottomButtonHeight, width: tabWidth, height: y - bottomButtonHeight))
         contentView.addSubview(tabView)
 
         // Create tabs
@@ -180,13 +184,22 @@ class ConfigSheetController: NSObject {
         setupColorsTab()
         setupEffectsTab()
 
+        // URL preview section on the right
+        let urlPreviewX = padding + tabWidth + padding
+
         // URL preview label
-        let urlLabel = NSTextField(labelWithString: "Preview URL (real screensaver uses local copy):")
-        urlLabel.frame = NSRect(x: padding, y: 168, width: 300, height: 17)
+        let urlLabel = NSTextField(labelWithString: "Preview URL:")
+        urlLabel.frame = NSRect(x: urlPreviewX, y: y - 17, width: urlPreviewWidth, height: 17)
         contentView.addSubview(urlLabel)
 
-        // URL preview scroll view with text view (readonly, selectable, multiline)
-        let scrollView = NSScrollView(frame: NSRect(x: padding, y: 50, width: contentView.bounds.width - padding * 2, height: 115))
+        let urlSubLabel = NSTextField(labelWithString: "(screensaver uses local copy)")
+        urlSubLabel.frame = NSRect(x: urlPreviewX, y: y - 34, width: urlPreviewWidth, height: 14)
+        urlSubLabel.font = NSFont.systemFont(ofSize: 10)
+        urlSubLabel.textColor = NSColor.secondaryLabelColor
+        contentView.addSubview(urlSubLabel)
+
+        // URL preview scroll view
+        let scrollView = NSScrollView(frame: NSRect(x: urlPreviewX, y: bottomButtonHeight + 80, width: urlPreviewWidth, height: y - bottomButtonHeight - 125))
         scrollView.hasVerticalScroller = true
         scrollView.hasHorizontalScroller = false
         scrollView.autohidesScrollers = true
@@ -205,6 +218,14 @@ class ConfigSheetController: NSObject {
         scrollView.documentView = urlPreviewField
         contentView.addSubview(scrollView)
 
+        // Copy URL button (in URL preview section)
+        let copyURLButton = NSButton(frame: NSRect(x: urlPreviewX, y: bottomButtonHeight + 44, width: 100, height: 32))
+        copyURLButton.title = "Copy URL"
+        copyURLButton.bezelStyle = .rounded
+        copyURLButton.target = self
+        copyURLButton.action = #selector(copyURLClicked)
+        contentView.addSubview(copyURLButton)
+
         // Buttons at bottom
         var buttonX: CGFloat = padding
 
@@ -217,22 +238,13 @@ class ConfigSheetController: NSObject {
         contentView.addSubview(resetButton)
         buttonX += 130
 
-        // Sync Monitors button (moved from monitor section)
+        // Sync Monitors button
         copyToAllButton = NSButton(frame: NSRect(x: buttonX, y: 12, width: 110, height: 32))
         copyToAllButton.title = "Sync Monitors"
         copyToAllButton.bezelStyle = .rounded
         copyToAllButton.target = self
         copyToAllButton.action = #selector(copyToAllClicked)
         contentView.addSubview(copyToAllButton)
-        buttonX += 140
-
-        // Copy URL button
-        let copyURLButton = NSButton(frame: NSRect(x: buttonX, y: 12, width: 80, height: 32))
-        copyURLButton.title = "Copy URL"
-        copyURLButton.bezelStyle = .rounded
-        copyURLButton.target = self
-        copyURLButton.action = #selector(copyURLClicked)
-        contentView.addSubview(copyURLButton)
 
         // Cancel button
         let cancelButton = NSButton(frame: NSRect(x: contentView.bounds.width - 190, y: 12, width: 80, height: 32))
@@ -261,12 +273,17 @@ class ConfigSheetController: NSObject {
         perMonitorCheckbox.frame = NSRect(x: padding, y: currentY, width: 280, height: 20)
         view.addSubview(perMonitorCheckbox)
 
-        // Monitor selector
+        // Monitor selector (aligned to right)
+        let monitorPopupWidth: CGFloat = 160
+        let monitorLabelWidth: CGFloat = 60
+        let monitorPopupX = view.bounds.width - padding - monitorPopupWidth
+        let monitorLabelX = monitorPopupX - monitorLabelWidth - 5
+
         let monitorLabel = NSTextField(labelWithString: "Monitor:")
-        monitorLabel.frame = NSRect(x: 320, y: currentY, width: 60, height: 20)
+        monitorLabel.frame = NSRect(x: monitorLabelX, y: currentY, width: monitorLabelWidth, height: 20)
         view.addSubview(monitorLabel)
 
-        monitorPopup = NSPopUpButton(frame: NSRect(x: 380, y: currentY - 2, width: 160, height: 25))
+        monitorPopup = NSPopUpButton(frame: NSRect(x: monitorPopupX, y: currentY - 2, width: monitorPopupWidth, height: 25))
         monitorPopup.target = self
         monitorPopup.action = #selector(monitorChanged)
         view.addSubview(monitorPopup)
@@ -346,25 +363,12 @@ class ConfigSheetController: NSObject {
         tabView.addTabViewItem(tabItem)
     }
 
-    private func scrollToTop(_ scrollView: NSScrollView) {
-        if let documentView = scrollView.documentView {
-            let topPoint = NSPoint(x: 0, y: documentView.bounds.height - scrollView.contentSize.height)
-            documentView.scroll(topPoint)
-        }
-    }
-
     private func setupAnimationTab() {
         let tabItem = NSTabViewItem(identifier: "animation")
         tabItem.label = "Animation"
 
-        let scrollView = NSScrollView(frame: tabView.contentRect)
-        scrollView.hasVerticalScroller = true
-        scrollView.autohidesScrollers = true
-
-        let view = NSView(frame: NSRect(x: 0, y: 0, width: tabView.contentRect.width - 20, height: 320))
-        scrollView.documentView = view
-        tabItem.view = scrollView
-        scrollToTop(scrollView)
+        let view = NSView(frame: tabView.contentRect)
+        tabItem.view = view
 
         var y = view.bounds.height - 30
 
@@ -415,14 +419,8 @@ class ConfigSheetController: NSObject {
         let tabItem = NSTabViewItem(identifier: "appearance")
         tabItem.label = "Appearance"
 
-        let scrollView = NSScrollView(frame: tabView.contentRect)
-        scrollView.hasVerticalScroller = true
-        scrollView.autohidesScrollers = true
-
-        let view = NSView(frame: NSRect(x: 0, y: 0, width: tabView.contentRect.width - 20, height: 560))
-        scrollView.documentView = view
-        tabItem.view = scrollView
-        scrollToTop(scrollView)
+        let view = NSView(frame: tabView.contentRect)
+        tabItem.view = view
 
         var y = view.bounds.height - 30
 
@@ -497,14 +495,8 @@ class ConfigSheetController: NSObject {
         let tabItem = NSTabViewItem(identifier: "colors")
         tabItem.label = "Colors"
 
-        let scrollView = NSScrollView(frame: tabView.contentRect)
-        scrollView.hasVerticalScroller = true
-        scrollView.autohidesScrollers = true
-
-        let view = NSView(frame: NSRect(x: 0, y: 0, width: tabView.contentRect.width - 20, height: 480))
-        scrollView.documentView = view
-        tabItem.view = scrollView
-        scrollToTop(scrollView)
+        let view = NSView(frame: tabView.contentRect)
+        tabItem.view = view
 
         var y = view.bounds.height - 30
 
@@ -575,14 +567,8 @@ class ConfigSheetController: NSObject {
         let tabItem = NSTabViewItem(identifier: "effects")
         tabItem.label = "Effects"
 
-        let scrollView = NSScrollView(frame: tabView.contentRect)
-        scrollView.hasVerticalScroller = true
-        scrollView.autohidesScrollers = true
-
-        let view = NSView(frame: NSRect(x: 0, y: 0, width: tabView.contentRect.width - 20, height: 400))
-        scrollView.documentView = view
-        tabItem.view = scrollView
-        scrollToTop(scrollView)
+        let view = NSView(frame: tabView.contentRect)
+        tabItem.view = view
 
         var y = view.bounds.height - 30
 
