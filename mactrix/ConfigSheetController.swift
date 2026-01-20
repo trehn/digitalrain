@@ -126,12 +126,16 @@ class ConfigSheetController: NSObject {
     private var skipIntroCheckbox: NSButton!
     private var loopsCheckbox: NSButton!
     
+    // URL preview
+    private var urlPreviewField: NSTextField!
+    private var currentURLString: String = "https://rezmason.github.io/matrix/"
+    
     // MARK: - Initialization
     
     override init() {
         // Create the window
         window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 500, height: 520),
+            contentRect: NSRect(x: 0, y: 0, width: 580, height: 720),
             styleMask: [.titled],
             backing: .buffered,
             defer: false
@@ -151,20 +155,22 @@ class ConfigSheetController: NSObject {
         let contentView = NSView(frame: window.contentView!.bounds)
         window.contentView = contentView
         
-        var y = contentView.bounds.height - 10
+        let padding: CGFloat = 20
+        var y = contentView.bounds.height - padding
         
         // Monitor settings section
         y = setupMonitorSection(in: contentView, y: y)
         
         // Separator
-        y -= 10
-        let separator = NSBox(frame: NSRect(x: 10, y: y, width: contentView.bounds.width - 20, height: 1))
+        y -= 15
+        let separator = NSBox(frame: NSRect(x: padding, y: y, width: contentView.bounds.width - padding * 2, height: 1))
         separator.boxType = .separator
         contentView.addSubview(separator)
-        y -= 10
+        y -= 15
         
-        // Tab view
-        tabView = NSTabView(frame: NSRect(x: 10, y: 50, width: contentView.bounds.width - 20, height: y - 50))
+        // Tab view (leave space for URL preview and buttons at bottom)
+        let bottomAreaHeight: CGFloat = 200
+        tabView = NSTabView(frame: NSRect(x: padding, y: bottomAreaHeight, width: contentView.bounds.width - padding * 2, height: y - bottomAreaHeight))
         contentView.addSubview(tabView)
         
         // Create tabs
@@ -175,15 +181,70 @@ class ConfigSheetController: NSObject {
         setupEffectsTab()
         setupAdvancedTab()
         
+        // URL preview label
+        let urlLabel = NSTextField(labelWithString: "Preview URL (real screensaver uses local copy):")
+        urlLabel.frame = NSRect(x: padding, y: 168, width: 300, height: 17)
+        contentView.addSubview(urlLabel)
+        
+        // URL preview scroll view with text view (readonly, selectable, multiline)
+        let scrollView = NSScrollView(frame: NSRect(x: padding, y: 50, width: contentView.bounds.width - padding * 2, height: 115))
+        scrollView.hasVerticalScroller = true
+        scrollView.hasHorizontalScroller = false
+        scrollView.autohidesScrollers = true
+        scrollView.borderType = .bezelBorder
+        
+        urlPreviewField = NSTextField(frame: NSRect(x: 0, y: 0, width: scrollView.contentSize.width, height: scrollView.contentSize.height))
+        urlPreviewField.isEditable = false
+        urlPreviewField.isSelectable = true
+        urlPreviewField.font = NSFont.monospacedSystemFont(ofSize: 11, weight: .regular)
+        urlPreviewField.backgroundColor = NSColor.textBackgroundColor
+        urlPreviewField.isBezeled = false
+        urlPreviewField.drawsBackground = true
+        urlPreviewField.cell?.wraps = true
+        urlPreviewField.cell?.isScrollable = false
+        urlPreviewField.maximumNumberOfLines = 0
+        scrollView.documentView = urlPreviewField
+        contentView.addSubview(scrollView)
+        
         // Buttons at bottom
-        let cancelButton = NSButton(frame: NSRect(x: contentView.bounds.width - 180, y: 10, width: 80, height: 32))
+        var buttonX: CGFloat = padding
+        
+        // Reset to Defaults button
+        let resetButton = NSButton(frame: NSRect(x: buttonX, y: 12, width: 120, height: 32))
+        resetButton.title = "Reset to Defaults"
+        resetButton.bezelStyle = .rounded
+        resetButton.target = self
+        resetButton.action = #selector(resetToDefaultsClicked)
+        contentView.addSubview(resetButton)
+        buttonX += 130
+        
+        // Sync Monitors button (moved from monitor section)
+        copyToAllButton = NSButton(frame: NSRect(x: buttonX, y: 12, width: 110, height: 32))
+        copyToAllButton.title = "Sync Monitors"
+        copyToAllButton.bezelStyle = .rounded
+        copyToAllButton.target = self
+        copyToAllButton.action = #selector(copyToAllClicked)
+        contentView.addSubview(copyToAllButton)
+        buttonX += 140
+        
+        // Copy URL button
+        let copyURLButton = NSButton(frame: NSRect(x: buttonX, y: 12, width: 80, height: 32))
+        copyURLButton.title = "Copy URL"
+        copyURLButton.bezelStyle = .rounded
+        copyURLButton.target = self
+        copyURLButton.action = #selector(copyURLClicked)
+        contentView.addSubview(copyURLButton)
+        
+        // Cancel button
+        let cancelButton = NSButton(frame: NSRect(x: contentView.bounds.width - 190, y: 12, width: 80, height: 32))
         cancelButton.title = "Cancel"
         cancelButton.bezelStyle = .rounded
         cancelButton.target = self
         cancelButton.action = #selector(cancelClicked)
         contentView.addSubview(cancelButton)
         
-        let okButton = NSButton(frame: NSRect(x: contentView.bounds.width - 90, y: 10, width: 80, height: 32))
+        // OK button
+        let okButton = NSButton(frame: NSRect(x: contentView.bounds.width - 100, y: 12, width: 80, height: 32))
         okButton.title = "OK"
         okButton.bezelStyle = .rounded
         okButton.keyEquivalent = "\r"
@@ -194,30 +255,22 @@ class ConfigSheetController: NSObject {
     
     private func setupMonitorSection(in view: NSView, y: CGFloat) -> CGFloat {
         let currentY = y - 25
+        let padding: CGFloat = 20
         
         // Per-monitor checkbox
         perMonitorCheckbox = NSButton(checkboxWithTitle: "Customize each monitor individually", target: self, action: #selector(perMonitorChanged))
-        perMonitorCheckbox.frame = NSRect(x: 20, y: currentY, width: 250, height: 20)
+        perMonitorCheckbox.frame = NSRect(x: padding, y: currentY, width: 280, height: 20)
         view.addSubview(perMonitorCheckbox)
         
         // Monitor selector
         let monitorLabel = NSTextField(labelWithString: "Monitor:")
-        monitorLabel.frame = NSRect(x: 280, y: currentY, width: 55, height: 20)
+        monitorLabel.frame = NSRect(x: 320, y: currentY, width: 60, height: 20)
         view.addSubview(monitorLabel)
         
-        monitorPopup = NSPopUpButton(frame: NSRect(x: 335, y: currentY - 2, width: 120, height: 25))
+        monitorPopup = NSPopUpButton(frame: NSRect(x: 380, y: currentY - 2, width: 160, height: 25))
         monitorPopup.target = self
         monitorPopup.action = #selector(monitorChanged)
         view.addSubview(monitorPopup)
-        
-        // Copy to all button
-        copyToAllButton = NSButton(frame: NSRect(x: 460, y: currentY - 2, width: 30, height: 25))
-        copyToAllButton.title = "⎘"
-        copyToAllButton.toolTip = "Copy settings to all monitors"
-        copyToAllButton.bezelStyle = .rounded
-        copyToAllButton.target = self
-        copyToAllButton.action = #selector(copyToAllClicked)
-        view.addSubview(copyToAllButton)
         
         updateMonitorUI()
         
@@ -227,7 +280,7 @@ class ConfigSheetController: NSObject {
     private func updateMonitorUI() {
         let enabled = perMonitorCheckbox.state == .on
         monitorPopup.isEnabled = enabled
-        copyToAllButton.isEnabled = enabled
+        copyToAllButton?.isEnabled = enabled
         
         // Update monitor popup
         monitorPopup.removeAllItems()
@@ -591,11 +644,11 @@ class ConfigSheetController: NSObject {
     
     private func addSliderRow(to view: NSView, y: CGFloat, label: String, min: Double, max: Double, value: Double, isInteger: Bool = false, step: Double? = nil, configure: (NSSlider, NSTextField) -> Void) -> CGFloat {
         let labelField = NSTextField(labelWithString: label)
-        labelField.frame = NSRect(x: 20, y: y, width: 140, height: 20)
+        labelField.frame = NSRect(x: 20, y: y, width: 150, height: 20)
         labelField.alignment = .right
         view.addSubview(labelField)
         
-        let slider = NSSlider(frame: NSRect(x: 170, y: y, width: 200, height: 20))
+        let slider = NSSlider(frame: NSRect(x: 180, y: y, width: 260, height: 20))
         slider.minValue = min
         slider.maxValue = max
         slider.doubleValue = value
@@ -608,52 +661,56 @@ class ConfigSheetController: NSObject {
         view.addSubview(slider)
         
         let valueLabel = NSTextField(labelWithString: isInteger ? "\(Int(value))" : String(format: "%.2f", value))
-        valueLabel.frame = NSRect(x: 380, y: y, width: 60, height: 20)
+        valueLabel.frame = NSRect(x: 450, y: y, width: 70, height: 20)
         view.addSubview(valueLabel)
         
         configure(slider, valueLabel)
         
-        return y - 30
+        return y - 32
     }
     
     private func addCheckboxRow(to view: NSView, y: CGFloat, label: String, configure: (NSButton) -> Void) -> CGFloat {
-        let checkbox = NSButton(checkboxWithTitle: label, target: nil, action: nil)
-        checkbox.frame = NSRect(x: 170, y: y, width: 250, height: 20)
+        let checkbox = NSButton(checkboxWithTitle: label, target: self, action: #selector(controlChanged))
+        checkbox.frame = NSRect(x: 180, y: y, width: 300, height: 20)
         view.addSubview(checkbox)
         
         configure(checkbox)
         
-        return y - 30
+        return y - 32
     }
     
     private func addPopupRow(to view: NSView, y: CGFloat, label: String, items: [String], configure: (NSPopUpButton) -> Void) -> CGFloat {
         let labelField = NSTextField(labelWithString: label)
-        labelField.frame = NSRect(x: 20, y: y, width: 140, height: 20)
+        labelField.frame = NSRect(x: 20, y: y, width: 150, height: 20)
         labelField.alignment = .right
         view.addSubview(labelField)
         
-        let popup = NSPopUpButton(frame: NSRect(x: 170, y: y - 2, width: 200, height: 25))
+        let popup = NSPopUpButton(frame: NSRect(x: 180, y: y - 2, width: 260, height: 25))
         popup.addItems(withTitles: items)
+        popup.target = self
+        popup.action = #selector(controlChanged)
         view.addSubview(popup)
         
         configure(popup)
         
-        return y - 35
+        return y - 36
     }
     
     private func addColorRow(to view: NSView, y: CGFloat, label: String, configure: (NSColorWell) -> Void) -> CGFloat {
         let labelField = NSTextField(labelWithString: label)
-        labelField.frame = NSRect(x: 20, y: y, width: 140, height: 20)
+        labelField.frame = NSRect(x: 20, y: y, width: 150, height: 20)
         labelField.alignment = .right
         view.addSubview(labelField)
         
-        let colorWell = NSColorWell(frame: NSRect(x: 170, y: y - 2, width: 44, height: 24))
+        let colorWell = NSColorWell(frame: NSRect(x: 180, y: y - 2, width: 50, height: 26))
         colorWell.color = NSColor.white
+        colorWell.target = self
+        colorWell.action = #selector(controlChanged)
         view.addSubview(colorWell)
         
         configure(colorWell)
         
-        return y - 35
+        return y - 36
     }
     
     // MARK: - Actions
@@ -690,7 +747,170 @@ class ConfigSheetController: NSObject {
     }
     
     @objc private func copyToAllClicked() {
-        settings.copyToAllScreens(from: currentScreenID)
+        let alert = NSAlert()
+        alert.messageText = "Sync Monitors"
+        alert.informativeText = "This will copy the current monitor's settings to all other monitors, replacing their individual configurations."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Sync All")
+        alert.addButton(withTitle: "Cancel")
+        
+        alert.beginSheetModal(for: window) { response in
+            if response == .alertFirstButtonReturn {
+                self.syncCurrentSettingsToAllMonitors()
+            }
+        }
+    }
+    
+    private func syncCurrentSettingsToAllMonitors() {
+        // First save current UI to cache
+        saveToCache()
+        
+        // Get all screen IDs
+        let allScreenIDs = NSScreen.screens.compactMap { settings.screenID(for: $0) }
+        
+        // Get the current screen's settings from cache (or global if not per-monitor)
+        let sourceScreen = cachedUsePerMonitorSettings ? currentScreenID : nil
+        
+        // Copy each cached setting to all other screens
+        let settingKeys = [
+            "version", "font", "animationSpeed", "fallSpeed", "cycleSpeed", "cycleFrameSkip",
+            "forwardSpeed", "raindropLength", "fps", "brightnessDecay", "numColumns", "resolution",
+            "density", "glyphHeightToWidth", "glyphVerticalSpacing", "glyphEdgeCrop", "glyphFlip",
+            "glyphRotation", "slant", "volumetric", "isometric", "isPolar", "baseTexture", "glintTexture",
+            "backgroundColor", "cursorColor", "glintColor", "cursorIntensity", "glintIntensity",
+            "isolateCursor", "isolateGlint", "baseBrightness", "baseContrast", "glintBrightness",
+            "glintContrast", "brightnessOverride", "brightnessThreshold", "effect", "bloomStrength",
+            "bloomSize", "highPassThreshold", "ditherMagnitude", "hasThunder", "rippleTypeName",
+            "rippleScale", "rippleThickness", "rippleSpeed", "renderer", "useHalfFloat", "skipIntro", "loops"
+        ]
+        
+        for targetScreenID in allScreenIDs {
+            if targetScreenID != currentScreenID {
+                for key in settingKeys {
+                    let sourceKey = cacheKey(key, forScreen: sourceScreen)
+                    let targetKey = "\(key)_\(targetScreenID)"
+                    
+                    if let value = settingsCache[sourceKey] {
+                        settingsCache[targetKey] = value
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc private func copyURLClicked() {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        // Get the URL without newlines
+        pasteboard.setString(currentURLString, forType: .string)
+    }
+    
+    @objc private func resetToDefaultsClicked() {
+        let alert = NSAlert()
+        alert.messageText = "Reset to Defaults"
+        alert.informativeText = "This will reset all settings to their default values. Any customizations you've made will be lost."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Reset")
+        alert.addButton(withTitle: "Cancel")
+        
+        alert.beginSheetModal(for: window) { response in
+            if response == .alertFirstButtonReturn {
+                self.performResetToDefaults()
+            }
+        }
+    }
+    
+    private func performResetToDefaults() {
+        // Reset all values to defaults in the UI
+        versionPopup.selectItem(withTitle: "classic")
+        fontPopup.selectItem(withTitle: "matrixcode")
+        
+        animationSpeedSlider.doubleValue = 1.0
+        animationSpeedLabel.stringValue = "1.00"
+        fallSpeedSlider.doubleValue = 0.3
+        fallSpeedLabel.stringValue = "0.30"
+        cycleSpeedSlider.doubleValue = 0.03
+        cycleSpeedLabel.stringValue = "0.030"
+        cycleFrameSkipSlider.integerValue = 1
+        cycleFrameSkipLabel.stringValue = "1"
+        forwardSpeedSlider.doubleValue = 0.25
+        forwardSpeedLabel.stringValue = "0.25"
+        raindropLengthSlider.doubleValue = 0.75
+        raindropLengthLabel.stringValue = "0.75"
+        fpsSlider.integerValue = 60
+        fpsLabel.stringValue = "60"
+        brightnessDecaySlider.doubleValue = 1.0
+        brightnessDecayLabel.stringValue = "1.00"
+        
+        numColumnsSlider.integerValue = 80
+        numColumnsLabel.stringValue = "80"
+        resolutionSlider.doubleValue = 0.75
+        resolutionLabel.stringValue = "0.75"
+        densitySlider.doubleValue = 1.0
+        densityLabel.stringValue = "1.00"
+        glyphHeightToWidthSlider.doubleValue = 1.0
+        glyphHeightToWidthLabel.stringValue = "1.00"
+        glyphVerticalSpacingSlider.doubleValue = 1.0
+        glyphVerticalSpacingLabel.stringValue = "1.00"
+        glyphEdgeCropSlider.doubleValue = 0.0
+        glyphEdgeCropLabel.stringValue = "0.00"
+        glyphFlipCheckbox.state = .off
+        glyphRotationSlider.integerValue = 0
+        glyphRotationLabel.stringValue = "0"
+        slantSlider.doubleValue = 0.0
+        slantLabel.stringValue = "0.0"
+        volumetricCheckbox.state = .off
+        isometricCheckbox.state = .off
+        isPolarCheckbox.state = .off
+        baseTexturePopup.selectItem(withTitle: "none")
+        glintTexturePopup.selectItem(withTitle: "none")
+        
+        backgroundColorWell.color = .black
+        cursorColorWell.color = NSColor(hue: 0.242, saturation: 1.0, brightness: 0.73, alpha: 1.0)
+        glintColorWell.color = .white
+        cursorIntensitySlider.doubleValue = 2.0
+        cursorIntensityLabel.stringValue = "2.00"
+        glintIntensitySlider.doubleValue = 1.0
+        glintIntensityLabel.stringValue = "1.00"
+        isolateCursorCheckbox.state = .on
+        isolateGlintCheckbox.state = .off
+        baseBrightnessSlider.doubleValue = -0.5
+        baseBrightnessLabel.stringValue = "-0.50"
+        baseContrastSlider.doubleValue = 1.1
+        baseContrastLabel.stringValue = "1.10"
+        glintBrightnessSlider.doubleValue = -1.5
+        glintBrightnessLabel.stringValue = "-1.50"
+        glintContrastSlider.doubleValue = 2.5
+        glintContrastLabel.stringValue = "2.50"
+        brightnessOverrideSlider.doubleValue = 0.0
+        brightnessOverrideLabel.stringValue = "0.00"
+        brightnessThresholdSlider.doubleValue = 0.0
+        brightnessThresholdLabel.stringValue = "0.00"
+        
+        effectPopup.selectItem(withTitle: "palette")
+        bloomStrengthSlider.doubleValue = 0.7
+        bloomStrengthLabel.stringValue = "0.70"
+        bloomSizeSlider.doubleValue = 0.4
+        bloomSizeLabel.stringValue = "0.40"
+        highPassThresholdSlider.doubleValue = 0.1
+        highPassThresholdLabel.stringValue = "0.10"
+        ditherMagnitudeSlider.doubleValue = 0.05
+        ditherMagnitudeLabel.stringValue = "0.050"
+        hasThunderCheckbox.state = .off
+        rippleTypePopup.selectItem(withTitle: "none")
+        rippleScaleSlider.doubleValue = 30.0
+        rippleScaleLabel.stringValue = "30.0"
+        rippleThicknessSlider.doubleValue = 0.2
+        rippleThicknessLabel.stringValue = "0.20"
+        rippleSpeedSlider.doubleValue = 0.2
+        rippleSpeedLabel.stringValue = "0.20"
+        
+        rendererPopup.selectItem(withTitle: "regl")
+        useHalfFloatCheckbox.state = .off
+        skipIntroCheckbox.state = .on
+        loopsCheckbox.state = .off
+        
+        updateURLPreview()
     }
     
     @objc private func sliderChanged(_ sender: NSSlider) {
@@ -726,6 +946,12 @@ class ConfigSheetController: NSObject {
         else if sender === rippleScaleSlider { rippleScaleLabel.stringValue = String(format: "%.1f", sender.doubleValue) }
         else if sender === rippleThicknessSlider { rippleThicknessLabel.stringValue = String(format: "%.2f", sender.doubleValue) }
         else if sender === rippleSpeedSlider { rippleSpeedLabel.stringValue = String(format: "%.2f", sender.doubleValue) }
+        
+        updateURLPreview()
+    }
+    
+    @objc private func controlChanged() {
+        updateURLPreview()
     }
     
     @objc private func cancelClicked() {
@@ -910,6 +1136,8 @@ class ConfigSheetController: NSObject {
         useHalfFloatCheckbox.state = getCachedBool("useHalfFloat", screen: screen, default: false) ? .on : .off
         skipIntroCheckbox.state = getCachedBool("skipIntro", screen: screen, default: true) ? .on : .off
         loopsCheckbox.state = getCachedBool("loops", screen: screen, default: false) ? .on : .off
+        
+        updateURLPreview()
     }
     
     /// Save current UI values to the in-memory cache (not to disk)
@@ -980,6 +1208,144 @@ class ConfigSheetController: NSObject {
         setCached(useHalfFloatCheckbox.state == .on, forKey: "useHalfFloat", screen: screen)
         setCached(skipIntroCheckbox.state == .on, forKey: "skipIntro", screen: screen)
         setCached(loopsCheckbox.state == .on, forKey: "loops", screen: screen)
+    }
+    
+    /// Update the URL preview field based on current UI values
+    private func updateURLPreview() {
+        var items: [URLQueryItem] = []
+        
+        // Helper to add non-default string values
+        func addString(_ paramName: String, value: String?, defaultValue: String) {
+            guard let value = value, !value.isEmpty, value != defaultValue else { return }
+            items.append(URLQueryItem(name: paramName, value: value))
+        }
+        
+        // Helper to add non-default double values
+        func addDouble(_ paramName: String, value: Double, defaultValue: Double) {
+            guard abs(value - defaultValue) > 0.001 else { return }
+            items.append(URLQueryItem(name: paramName, value: String(value)))
+        }
+        
+        // Helper to add non-default int values
+        func addInt(_ paramName: String, value: Int, defaultValue: Int) {
+            guard value != defaultValue else { return }
+            items.append(URLQueryItem(name: paramName, value: String(value)))
+        }
+        
+        // Helper to add non-default bool values
+        func addBool(_ paramName: String, value: Bool, defaultValue: Bool) {
+            guard value != defaultValue else { return }
+            items.append(URLQueryItem(name: paramName, value: value ? "true" : "false"))
+        }
+        
+        // Helper to add color as HSL
+        func addColor(_ paramName: String, color: NSColor, defaultColor: NSColor) {
+            let calibrated = color.usingColorSpace(.deviceRGB) ?? color
+            let defaultCalibrated = defaultColor.usingColorSpace(.deviceRGB) ?? defaultColor
+            
+            let hDiff = abs(calibrated.hueComponent - defaultCalibrated.hueComponent)
+            let sDiff = abs(calibrated.saturationComponent - defaultCalibrated.saturationComponent)
+            let bDiff = abs(calibrated.brightnessComponent - defaultCalibrated.brightnessComponent)
+            
+            if hDiff > 0.01 || sDiff > 0.01 || bDiff > 0.01 {
+                let h = calibrated.hueComponent
+                let s = calibrated.saturationComponent
+                let l = calibrated.brightnessComponent
+                items.append(URLQueryItem(name: paramName, value: "\(h),\(s),\(l)"))
+            }
+        }
+        
+        // Presets
+        addString("version", value: versionPopup.titleOfSelectedItem, defaultValue: "classic")
+        addString("font", value: fontPopup.titleOfSelectedItem, defaultValue: "matrixcode")
+        
+        // Animation
+        addDouble("animationSpeed", value: animationSpeedSlider.doubleValue, defaultValue: 1.0)
+        addDouble("fallSpeed", value: fallSpeedSlider.doubleValue, defaultValue: 0.3)
+        addDouble("cycleSpeed", value: cycleSpeedSlider.doubleValue, defaultValue: 0.03)
+        addInt("cycleFrameSkip", value: cycleFrameSkipSlider.integerValue, defaultValue: 1)
+        addDouble("forwardSpeed", value: forwardSpeedSlider.doubleValue, defaultValue: 0.25)
+        addDouble("raindropLength", value: raindropLengthSlider.doubleValue, defaultValue: 0.75)
+        addInt("fps", value: fpsSlider.integerValue, defaultValue: 60)
+        addDouble("brightnessDecay", value: brightnessDecaySlider.doubleValue, defaultValue: 1.0)
+        
+        // Appearance
+        addInt("numColumns", value: numColumnsSlider.integerValue, defaultValue: 80)
+        addDouble("resolution", value: resolutionSlider.doubleValue, defaultValue: 0.75)
+        addDouble("density", value: densitySlider.doubleValue, defaultValue: 1.0)
+        addDouble("glyphHeightToWidth", value: glyphHeightToWidthSlider.doubleValue, defaultValue: 1.0)
+        addDouble("glyphVerticalSpacing", value: glyphVerticalSpacingSlider.doubleValue, defaultValue: 1.0)
+        addDouble("glyphEdgeCrop", value: glyphEdgeCropSlider.doubleValue, defaultValue: 0.0)
+        addBool("glyphFlip", value: glyphFlipCheckbox.state == .on, defaultValue: false)
+        addInt("glyphRotation", value: glyphRotationSlider.integerValue, defaultValue: 0)
+        addDouble("slant", value: slantSlider.doubleValue, defaultValue: 0.0)
+        addBool("volumetric", value: volumetricCheckbox.state == .on, defaultValue: false)
+        addBool("isometric", value: isometricCheckbox.state == .on, defaultValue: false)
+        addBool("isPolar", value: isPolarCheckbox.state == .on, defaultValue: false)
+        
+        // Textures (only add if not "none")
+        if let baseTexture = baseTexturePopup.titleOfSelectedItem, baseTexture != "none" {
+            items.append(URLQueryItem(name: "baseTexture", value: baseTexture))
+        }
+        if let glintTexture = glintTexturePopup.titleOfSelectedItem, glintTexture != "none" {
+            items.append(URLQueryItem(name: "glintTexture", value: glintTexture))
+        }
+        
+        // Colors
+        addColor("backgroundHSL", color: backgroundColorWell.color, defaultColor: .black)
+        addColor("cursorHSL", color: cursorColorWell.color, defaultColor: NSColor(hue: 0.242, saturation: 1.0, brightness: 0.73, alpha: 1.0))
+        addColor("glintHSL", color: glintColorWell.color, defaultColor: .white)
+        addDouble("cursorIntensity", value: cursorIntensitySlider.doubleValue, defaultValue: 2.0)
+        addDouble("glyphIntensity", value: glintIntensitySlider.doubleValue, defaultValue: 1.0)
+        addBool("isolateCursor", value: isolateCursorCheckbox.state == .on, defaultValue: true)
+        addBool("isolateGlint", value: isolateGlintCheckbox.state == .on, defaultValue: false)
+        addDouble("baseBrightness", value: baseBrightnessSlider.doubleValue, defaultValue: -0.5)
+        addDouble("baseContrast", value: baseContrastSlider.doubleValue, defaultValue: 1.1)
+        addDouble("glintBrightness", value: glintBrightnessSlider.doubleValue, defaultValue: -1.5)
+        addDouble("glintContrast", value: glintContrastSlider.doubleValue, defaultValue: 2.5)
+        addDouble("brightnessOverride", value: brightnessOverrideSlider.doubleValue, defaultValue: 0.0)
+        addDouble("brightnessThreshold", value: brightnessThresholdSlider.doubleValue, defaultValue: 0.0)
+        
+        // Effects
+        addString("effect", value: effectPopup.titleOfSelectedItem, defaultValue: "palette")
+        addDouble("bloomStrength", value: bloomStrengthSlider.doubleValue, defaultValue: 0.7)
+        addDouble("bloomSize", value: bloomSizeSlider.doubleValue, defaultValue: 0.4)
+        addDouble("highPassThreshold", value: highPassThresholdSlider.doubleValue, defaultValue: 0.1)
+        addDouble("ditherMagnitude", value: ditherMagnitudeSlider.doubleValue, defaultValue: 0.05)
+        addBool("hasThunder", value: hasThunderCheckbox.state == .on, defaultValue: false)
+        
+        // Ripple (only add if not "none")
+        if let rippleType = rippleTypePopup.titleOfSelectedItem, rippleType != "none" {
+            items.append(URLQueryItem(name: "rippleTypeName", value: rippleType))
+            addDouble("rippleScale", value: rippleScaleSlider.doubleValue, defaultValue: 30.0)
+            addDouble("rippleThickness", value: rippleThicknessSlider.doubleValue, defaultValue: 0.2)
+            addDouble("rippleSpeed", value: rippleSpeedSlider.doubleValue, defaultValue: 0.2)
+        }
+        
+        // Advanced
+        addString("renderer", value: rendererPopup.titleOfSelectedItem, defaultValue: "regl")
+        addBool("useHalfFloat", value: useHalfFloatCheckbox.state == .on, defaultValue: false)
+        addBool("skipIntro", value: skipIntroCheckbox.state == .on, defaultValue: true)
+        addBool("loops", value: loopsCheckbox.state == .on, defaultValue: false)
+        
+        // Build the URL
+        var components = URLComponents(string: "https://rezmason.github.io/matrix/")!
+        components.queryItems = items.isEmpty ? nil : items
+        
+        currentURLString = components.url?.absoluteString ?? "https://rezmason.github.io/matrix/"
+        
+        // Format for display with newlines
+        if items.isEmpty {
+            urlPreviewField.stringValue = currentURLString
+        } else {
+            var displayLines = ["https://rezmason.github.io/matrix/?"]
+            for (index, item) in items.enumerated() {
+                let prefix = index == 0 ? "  " : "  &"
+                let value = item.value ?? ""
+                displayLines.append("\(prefix)\(item.name)=\(value)")
+            }
+            urlPreviewField.stringValue = displayLines.joined(separator: "\n")
+        }
     }
     
     /// Persist all cached settings to disk (called on OK)
