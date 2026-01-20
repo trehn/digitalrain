@@ -5,5 +5,8 @@ DerivedData/
 build/
 *.saver
 
+# Release builds
+release/
+
 # macOS
 .DS_Store
